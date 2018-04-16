@@ -31,7 +31,7 @@ namespace TaskManager
     {
         public List<Process> removed = new List<Process>();
         public Process[] localAll;
-        public string[] unkillable = new string[] { };
+        public string[] unkillable = new string[] { "bellservice", "ibsaservice", "pc-client", "m_agent_service" /*"SystemSettings", "System", "audiodg", "Google Update", "Idle", "nidevmon", "svchost", "igfxpers", "SynTPLpr", "SynTPEnh", "mitsijm", "FOGUserService", "LPlatSvc", "tagsrv", "MsMpEng", "ibmpmsvc", "lkads", "fontdrvhost", "ibsaService", "nimxs", "acwebbrowser", "MSBuild", "IpOverUsbSvc", "FOGService", "googledrivesync", "smss", "AdAppMgrSvc", "ServiceHub.DataWarehouseHost", "niDiscSvc", "ServiceHub.IdentityHost", "WmiPrvSE", "AGSService", "nidevldu", "taskhostw", "armsvc", "hkcmd", "SettingSyncHost", "wininit", "AdobeUpdateService", "XDesProc", "dasHost", "SkypeHost", "SynTPEnhService", "lsass", "MSASCuiL", "NIWebServiceContainer", "acrotray", "ServiceHub.Host.CLR.x86", "SecurityHealthService", "conhost", "ServiceHub.RoslynCodeAnalysisService32", "ApplicationFrameHost", "nimdnsResponder", "SynTPHelper", "FOGTray", "AutodeskDesktopApp", "services", "SystemWebServer", "ScriptedSandbox64", "NisSrv", "ServiceHub.SettingsHost", "alg", "lktsrv", "sihost", "lkcitdl", "dwm", "SearchFilterHost", "SearchIndexer", "OneDrive", "SearchProtocolHost", "dllhost", "ServiceHub.Host.Node.x86", "qxilj", "Agent", "Memory Compression", "jusched", "csrss", "NVDisplay.Container", "VBCSCompiler", "RuntimeBroker", "spoolsv", "explorer", "m_agent_service", "remsh", "ApplicationWebServer", "smartscreen", "TiWorker", "SynLenovoHelper", "SearchUI", "bdlu", "nipxism", "nisvcloc", "nierserver", "TrustedInstaller", "WUDFHost", "pc-client", "StandardCollector.Service", "ServiceHub.VSDetouredHost", "nidmsrv", "niauth_daemon", "PerfWatson2", "winlogon", "ShellExperienceHost"*/ };
         Timer updateTimer = new Timer();
 
         public void update(object source, ElapsedEventArgs e)
@@ -55,7 +55,24 @@ namespace TaskManager
             InitializeComponent();
             Ping ping = new Ping();
             Console.WriteLine("start");
-
+            //for (int i = 0; i < localAll.Count(); i++)
+            //{
+            //    TextReader tr = new StreamReader("test.txt");
+            //    string temp = tr.ReadToEnd();
+            //    tr.Close();
+            //    TextWriter tw = new StreamWriter("test.txt");
+            //    Console.WriteLine(i);
+            //    if (!temp.Contains(localAll[i].ProcessName))
+            //    {
+            //        Console.WriteLine("true");
+            //        tw.WriteLine(temp + "\n" + localAll[i].ProcessName);
+            //    }
+            //    else
+            //    {
+            //        tw.Write(temp);
+            //    }
+            //    tw.Close();
+            //}
             //for (int i = 0; i < 5; i++)
             //{
             //    //ping.Send("10.0.6.11", 1, new byte[65499]);
@@ -261,46 +278,50 @@ namespace TaskManager
             for (int i = 0; i < localAll.Length; i++)
             {
 
-                if (!removed.Contains(localAll[i]) && !unkillable.Contains(localAll[i].ProcessName.ToLower()))
+                if (!removed.Contains(localAll[i]) && (!unkillable.Contains(localAll[i].ProcessName.ToLower())))
                 {
-                    //if (!localAll[i].HasExited)
-                    //{
-                    //bool quitted = false;
-                    //try
-                    //{
-                    //    quitted = localAll[i].HasExited;
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    //Console.WriteLine(e.Message);
-                    //}
-                    //string gridXaml = XamlWriter.Save(example);
-                    //StringReader stringReader = new StringReader(gridXaml);
-                    //XmlReader xmlReader = XmlReader.Create(stringReader);
-                    //Button newGrid = (Button)XamlReader.Load(xmlReader);
-
-                    Button bt = new Button();
-                    //if (GetChildOfType<TextBlock>(newGrid).Text.Contains(filter.Text))
-                    //(TextBlock)newGrid.Children[0].
-                    //if (!quitted)
-                    //{
-                    if (localAll[i].ProcessName.ToLower().Contains(filter.Text.ToLower()))
+                    if (!unkillable.Contains(localAll[i].ProcessName))
                     {
-                        if (localAll[i].Responding)
-                            bt.Content = localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
-                        else
-                            bt.Content = "!NOT RESPONDING! " + localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
-                        //name.
-                        bt.Click += new RoutedEventHandler(endprocess_Click);
-                        bt.Tag = localAll[i].ProcessName + ":" + localAll[i].Id;
-                        //MessageBox.Show(GetChildOfType<Button>(newGrid).Tag.ToString());
-                        if (removed.Count > 0 && localAll[i].Id == removed[0].Id)
+                        Console.WriteLine(localAll[i].ProcessName + "," + !unkillable.Contains(localAll[i].ProcessName));
+                        //if (!localAll[i].HasExited)
+                        //{
+                        //bool quitted = false;
+                        //try
+                        //{
+                        //    quitted = localAll[i].HasExited;
+                        //}
+                        //catch (Exception e)
+                        //{
+                        //    //Console.WriteLine(e.Message);
+                        //}
+                        //string gridXaml = XamlWriter.Save(example);
+                        //StringReader stringReader = new StringReader(gridXaml);
+                        //XmlReader xmlReader = XmlReader.Create(stringReader);
+                        //Button newGrid = (Button)XamlReader.Load(xmlReader);
+
+                        Button bt = new Button();
+                        //if (GetChildOfType<TextBlock>(newGrid).Text.Contains(filter.Text))
+                        //(TextBlock)newGrid.Children[0].
+                        //if (!quitted)
+                        //{
+                        if (localAll[i].ProcessName.ToLower().Contains(filter.Text.ToLower()))
                         {
-                            removed.Remove(localAll[i]);
-                        }
-                        else
-                        {
-                            proccesspanel.Children.Add(bt);
+                            if (localAll[i].Responding)
+                                bt.Content = localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
+                            else
+                                bt.Content = "!NOT RESPONDING! " + localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
+                            //name.
+                            bt.Click += new RoutedEventHandler(endprocess_Click);
+                            bt.Tag = localAll[i].ProcessName + ":" + localAll[i].Id;
+                            //MessageBox.Show(GetChildOfType<Button>(newGrid).Tag.ToString());
+                            if (removed.Count > 0 && localAll[i].Id == removed[0].Id)
+                            {
+                                removed.Remove(localAll[i]);
+                            }
+                            else
+                            {
+                                proccesspanel.Children.Add(bt);
+                            }
                         }
                     }
                 }

@@ -12,3 +12,17 @@ C:\Users\draper.ethan\source\repos\TaskManager\TaskManager\obj\Release\TaskManag
 C:\Users\draper.ethan\source\repos\TaskManager\TaskManager\obj\Release\TaskManager.csproj.CoreCompileInputs.cache
 C:\Users\draper.ethan\source\repos\TaskManager\TaskManager\obj\Release\TaskManager.exe
 C:\Users\draper.ethan\source\repos\TaskManager\TaskManager\obj\Release\TaskManager.pdb
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\bin\Release\TaskManager.exe.config
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\bin\Release\TaskManager.exe
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\bin\Release\TaskManager.pdb
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\MainWindow.g.cs
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\App.g.cs
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\TaskManager_MarkupCompile.cache
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\TaskManager_MarkupCompile.lref
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\MainWindow.baml
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\TaskManager.g.resources
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\TaskManager.Properties.Resources.resources
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\TaskManager.csproj.GenerateResource.Cache
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\TaskManager.csproj.CoreCompileInputs.cache
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\TaskManager.exe
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Release\TaskManager.pdb
