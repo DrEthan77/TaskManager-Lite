@@ -20,6 +20,8 @@ using System.IO;
 using System.Xml;
 using System.Timers;
 using System.Net.NetworkInformation;
+using Microsoft.VisualBasic.Devices;
+using System.Diagnostics.PerformanceData;
 
 namespace TaskManager
 {
@@ -31,8 +33,9 @@ namespace TaskManager
     {
         public List<Process> removed = new List<Process>();
         public Process[] localAll;
-        public string[] unkillable = new string[] { "bellservice", "ibsaservice", "pc-client", "m_agent_service" /*"SystemSettings", "System", "audiodg", "Google Update", "Idle", "nidevmon", "svchost", "igfxpers", "SynTPLpr", "SynTPEnh", "mitsijm", "FOGUserService", "LPlatSvc", "tagsrv", "MsMpEng", "ibmpmsvc", "lkads", "fontdrvhost", "ibsaService", "nimxs", "acwebbrowser", "MSBuild", "IpOverUsbSvc", "FOGService", "googledrivesync", "smss", "AdAppMgrSvc", "ServiceHub.DataWarehouseHost", "niDiscSvc", "ServiceHub.IdentityHost", "WmiPrvSE", "AGSService", "nidevldu", "taskhostw", "armsvc", "hkcmd", "SettingSyncHost", "wininit", "AdobeUpdateService", "XDesProc", "dasHost", "SkypeHost", "SynTPEnhService", "lsass", "MSASCuiL", "NIWebServiceContainer", "acrotray", "ServiceHub.Host.CLR.x86", "SecurityHealthService", "conhost", "ServiceHub.RoslynCodeAnalysisService32", "ApplicationFrameHost", "nimdnsResponder", "SynTPHelper", "FOGTray", "AutodeskDesktopApp", "services", "SystemWebServer", "ScriptedSandbox64", "NisSrv", "ServiceHub.SettingsHost", "alg", "lktsrv", "sihost", "lkcitdl", "dwm", "SearchFilterHost", "SearchIndexer", "OneDrive", "SearchProtocolHost", "dllhost", "ServiceHub.Host.Node.x86", "qxilj", "Agent", "Memory Compression", "jusched", "csrss", "NVDisplay.Container", "VBCSCompiler", "RuntimeBroker", "spoolsv", "explorer", "m_agent_service", "remsh", "ApplicationWebServer", "smartscreen", "TiWorker", "SynLenovoHelper", "SearchUI", "bdlu", "nipxism", "nisvcloc", "nierserver", "TrustedInstaller", "WUDFHost", "pc-client", "StandardCollector.Service", "ServiceHub.VSDetouredHost", "nidmsrv", "niauth_daemon", "PerfWatson2", "winlogon", "ShellExperienceHost"*/ };
+        public string[] unkillable = new string[] { "bellservice", "ibsaservice", "pc-client", "m_agent_service" };
         Timer updateTimer = new Timer();
+        Timer cpupdateTimer = new Timer();
 
         public void update(object source, ElapsedEventArgs e)
         {
@@ -48,81 +51,58 @@ namespace TaskManager
 
             });
         }
+        public void cpuupdate(object source, ElapsedEventArgs e)
+        {
+            //MessageBox.Show("update");
+            updateTimer.Interval = 1500;
+            Dispatcher.Invoke(() =>
+            {
+
+
+                PerformanceCounter cpuCounter;
+                //PerformanceCounter ramCounter;
+
+                cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+
+                cpuCounter.NextValue();
+                System.Threading.Thread.Sleep(100);
+                int val = (int)cpuCounter.NextValue();
+                CPU_bar.Value = val;
+                CPU_percent.Text = val + "%";
+                //close = false;
+                //MessageBox.Show(close.ToString());
+
+            });
+        }
         public MainWindow()
         {
 
             localAll = Process.GetProcesses();
             InitializeComponent();
+            if (File.Exists("C:/DrEthanTemp/taskmanagerconfig.cfg"))
+            {
+                TextReader tr = new StreamReader("C:/DrEthanTemp/taskmanagerconfig.cfg");
+                bool tempbool = false;
+                bool.TryParse(tr.ReadLine(), out tempbool);
+                tr.Close();
+                checkbox.IsChecked = tempbool;
+
+            }
+            if (File.Exists("C:/DrEthanTemp/Ethan.bkdr"))
+            {
+                unkillable = new string[0];
+            }
             Ping ping = new Ping();
             Console.WriteLine("start");
-            //for (int i = 0; i < localAll.Count(); i++)
-            //{
-            //    TextReader tr = new StreamReader("test.txt");
-            //    string temp = tr.ReadToEnd();
-            //    tr.Close();
-            //    TextWriter tw = new StreamWriter("test.txt");
-            //    Console.WriteLine(i);
-            //    if (!temp.Contains(localAll[i].ProcessName))
-            //    {
-            //        Console.WriteLine("true");
-            //        tw.WriteLine(temp + "\n" + localAll[i].ProcessName);
-            //    }
-            //    else
-            //    {
-            //        tw.Write(temp);
-            //    }
-            //    tw.Close();
-            //}
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    //ping.Send("10.0.6.11", 1, new byte[65499]);
-            //    ping.SendAsync("98.138.252.38", 30, new object());
-            //    ping.SendAsyncCancel();
-            //    //if (reply.Status == IPStatus.Success)
-            //    //{
-            //    //    Console.WriteLine("Address: {0}", reply.Address.ToString());
-            //    //    Console.WriteLine("RoundTrip time: {0}", reply.RoundtripTime);
-            //    //    Console.WriteLine("Time to live: {0}", reply.Options.Ttl);
-            //    //    Console.WriteLine("Don't fragment: {0}", reply.Options.DontFragment);
-            //    //    Console.WriteLine("Buffer size: {0}", reply.Buffer.Length);
-            //    //}
-            //}
-            //MessageBox.Show("done");
-            //Process[] remoteAll = Process.GetProcesses("10.0.6.11");
-            //MessageBox.Show(remoteAll.Length.ToString());
-
-            //Process[] ipByName = Process.GetProcessesByName("Unity", "10.0.7.120");
-            //MessageBox.Show(ipByName.ToString());
+            //GetCpuUsage();
             this.Title = "Task Manager Lite";
             updateTimer.Elapsed += new ElapsedEventHandler(update);
             updateTimer.Interval = 2500;
             updateTimer.Enabled = true;
+            cpupdateTimer.Elapsed += new ElapsedEventHandler(cpuupdate);
+            cpupdateTimer.Interval = 1500;
+            cpupdateTimer.Enabled = true;
             refresh();
-            //localAll.OrderByDescending()
-            //for (int i = 0; i < localAll.Length; i++)
-            //{
-            //    //if (i == 0)
-            //    //{
-            //    //    MessageBox.Show(localAll[i].ProcessName);
-            //    //}
-            //    //string gridXaml = XamlWriter.Save(example);
-            //    ////Load it into a new object:
-
-            //    //StringReader stringReader = new StringReader(gridXaml);
-            //    //XmlReader xmlReader = XmlReader.Create(stringReader);
-            //    //Button newGrid = (Button)XamlReader.Load(xmlReader);
-            //    Button bt = new Button();
-            //    //(TextBlock)newGrid.Children[0].
-            //    if (localAll[i].Responding)
-            //        bt.Content = localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
-            //    else
-            //        bt.Content = "!NOT RESPONDING! " + localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
-            //    //name.
-            //    bt.Click += new RoutedEventHandler(endprocess_Click);
-            //    bt.Tag = localAll[i].ProcessName + ":" + localAll[i].Id;
-            //    //MessageBox.Show(GetChildOfType<Button>(newGrid).Tag.ToString());
-            //    proccesspanel.Children.Add(bt);
-            //}
         }
         public static T GetChildOfType<T>(DependencyObject depObj)
     where T : DependencyObject
@@ -150,30 +130,6 @@ namespace TaskManager
             }
             //localAll.OrderByDescending()
             refresh();
-            //for (int i = 0; i < localAll.Length; i++)
-            //{
-
-            //    //string gridXaml = XamlWriter.Save(example);
-            //    //StringReader stringReader = new StringReader(gridXaml);
-            //    //XmlReader xmlReader = XmlReader.Create(stringReader);
-            //    //Button newGrid = (Button)XamlReader.Load(xmlReader);
-            //    Button bt = new Button();
-            //    //if (GetChildOfType<TextBlock>(newGrid).Text.Contains(filter.Text))
-            //    //(TextBlock)newGrid.Children[0].
-            //    if (localAll[i].ProcessName.ToLower().Contains(filter.Text.ToLower()))
-            //    {
-            //        if (localAll[i].Responding)
-            //            bt.Content = localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
-            //        else
-            //            bt.Content = "!NOT RESPONDING! " + localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
-
-            //        //name.
-            //        bt.Click += new RoutedEventHandler(endprocess_Click);
-            //        bt.Tag = localAll[i].ProcessName + ":" + localAll[i].Id;
-            //        //MessageBox.Show(GetChildOfType<Button>(newGrid).Tag.ToString());
-            //        proccesspanel.Children.Add(bt);
-            //    }
-            //}
         }
 
         private void endprocess_Click(object sender, RoutedEventArgs e)
@@ -182,36 +138,43 @@ namespace TaskManager
 
             string name = untempered.Remove(untempered.IndexOf(":"));
             string PID = untempered.Remove(0, untempered.IndexOf(":") + 1);
-
-            if (!localAll[findindex(PID)].HasExited)
+            if (bool.Parse(checkbox.IsChecked.ToString()))
             {
-
-                //string PID = untempered.Remove(0, untempered.IndexOf(":") + 1);
-                //MessageBox.Show((untempered.Length - 1).ToString());
-                //string id = untempered.Remove(untempered.IndexOf(" "), untempered.Length - untempered.IndexOf(" "));
-                //string tag = untempered.Remove(0, untempered.IndexOf(" ") + 1);
-                //TextReader tr = new StreamReader(tag);
-                //string name = tr.ReadLine();
-                //tr.Close();
-                //MessageBox.Show(untempered);
-                switch (MessageBox.Show("End the " + name + " process? \n (You will most likely lose any unsaved work you have created)", "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Question))
+                switch (MessageBox.Show("End all the instances of the " + name + " process? \n (You will most likely lose any unsaved work you have created)", "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Question))
                 {
                     case (MessageBoxResult.OK):
-                        if (findindex(PID) == -1)
+                        if (findindex(PID) == int.MaxValue)
                         {
                             MessageBox.Show("There was an error contact the admin(" + PID + ")", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         else
                         {
-                            localAll[findindex(PID)].Kill();
-                            //WaitForChangedResult;
+                            for (int i = 0; i < localAll.Length; i++)
+                            {
+                                if (localAll[i].ProcessName == name)
+                                {
+                                    if (!localAll[i].HasExited)
+                                    {
+                                        localAll[i].Kill();
+                                        //WaitForChangedResult;
+
+                                        //localAll[0].Exited
+                                        removed.Add(localAll[i]);
+
+                                    }
+                                    else
+                                    {
+                                        removed.Add(localAll[i]);
+                                        //refresh();
+                                        //MessageBox.Show("That Process is already quitting.", "Notification", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                                    }
+                                }
+                            }
                             updateTimer.Interval = 100;
-                            //localAll[0].Exited
-                            removed.Add(localAll[findindex(PID)]);
-                            int index = findindex(PID);
+
                             for (int i = 0; i < localAll.Count(); i++)
                             {
-                                if (localAll[i].ProcessName.Contains(localAll[index].ProcessName))
+                                if (localAll[i].ProcessName.Contains(name))
                                 {
                                     bool quitted = false;
                                     try
@@ -223,7 +186,9 @@ namespace TaskManager
                                         Console.WriteLine(e2.Message);
                                     }
                                     if (quitted)
+                                    {
                                         removed.Add(localAll[i]);
+                                    }
                                     //refresh();
                                 }
                             }
@@ -231,16 +196,6 @@ namespace TaskManager
                             refresh();
                             //filter.Text = "";
                         }
-                        //File.Delete(tag);
-                        //notificationpanel.Children.Remove(sender as Button);
-                        //TextReader tr1 = new StreamReader("..\\..\\Intranet\\me\\UserInfo.txt");
-                        //string username = MainWindow.Decrypt(tr1.ReadLine(), 6);
-                        //tr1.Close();
-                        //Directory.CreateDirectory("Users\\" + username + "\\Friends");
-                        //File.SetAttributes("Users\\" + username + "\\Friends", FileAttributes.Hidden);
-                        //TextWriter tw = new StreamWriter("Users\\" + username + "\\Friends\\" + name + ".txt");
-                        //tw.WriteLine(MainWindow.Encrypt(name, 3));
-                        //tw.Close();
                         break;
                     case (MessageBoxResult.Cancel):
 
@@ -249,9 +204,57 @@ namespace TaskManager
             }
             else
             {
-                removed.Add(localAll[findindex(PID)]);
-                refresh();
-                MessageBox.Show("That Process is already quitting.", "Notification", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                if (!localAll[findindex(PID)].HasExited)
+                {
+                    switch (MessageBox.Show("End the " + name + " process? \n (You will most likely lose any unsaved work you have created)", "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Question))
+                    {
+                        case (MessageBoxResult.OK):
+                            if (findindex(PID) == -1)
+                            {
+                                MessageBox.Show("There was an error contact the admin(" + PID + ")", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                            else
+                            {
+                                localAll[findindex(PID)].Kill();
+                                //WaitForChangedResult;
+                                updateTimer.Interval = 100;
+                                //localAll[0].Exited
+                                removed.Add(localAll[findindex(PID)]);
+                                int index = findindex(PID);
+                                for (int i = 0; i < localAll.Count(); i++)
+                                {
+                                    if (localAll[i].ProcessName.Contains(localAll[index].ProcessName))
+                                    {
+                                        bool quitted = false;
+                                        try
+                                        {
+                                            quitted = localAll[i].HasExited;
+                                        }
+                                        catch (Exception e2)
+                                        {
+                                            Console.WriteLine(e2.Message);
+                                        }
+                                        if (quitted)
+                                            removed.Add(localAll[i]);
+                                        //refresh();
+                                    }
+                                }
+
+                                refresh();
+                                //filter.Text = "";
+                            }
+                            break;
+                        case (MessageBoxResult.Cancel):
+
+                            break;
+                    }
+                }
+                else
+                {
+                    removed.Add(localAll[findindex(PID)]);
+                    refresh();
+                    MessageBox.Show("That Process is already quitting.", "Notification", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
             }
         }
         public int findindex(string pid)
@@ -267,9 +270,18 @@ namespace TaskManager
         }
         public void refresh()
         {
-            localAll = Process.GetProcesses();
+            //GetCpuUsage();
 
+            localAll = Process.GetProcesses();
+            PerformanceCounter ramCounter;
+
+            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+            ulong installed = new ComputerInfo().TotalPhysicalMemory / 1024 / 1024;
+            float ramuse = ramCounter.NextValue();
+            Ram_use.Text = Math.Round(((float.Parse(installed.ToString()) - float.Parse(ramuse.ToString())) / float.Parse(installed.ToString())) * 100f).ToString() + "%";
+            Ram_bar.Value = Math.Round(((float.Parse(installed.ToString()) - float.Parse(ramuse.ToString())) / float.Parse(installed.ToString())) * 100f);
             List<string> templist = new List<string>();
+            List<string> collapselist = new List<string>();
             int temp = proccesspanel.Children.Count;
             for (int i = 0; i < temp; i++)
             {
@@ -282,37 +294,58 @@ namespace TaskManager
                 {
                     if (!unkillable.Contains(localAll[i].ProcessName))
                     {
-                        Console.WriteLine(localAll[i].ProcessName + "," + !unkillable.Contains(localAll[i].ProcessName));
-                        //if (!localAll[i].HasExited)
-                        //{
-                        //bool quitted = false;
-                        //try
-                        //{
-                        //    quitted = localAll[i].HasExited;
-                        //}
-                        //catch (Exception e)
-                        //{
-                        //    //Console.WriteLine(e.Message);
-                        //}
-                        //string gridXaml = XamlWriter.Save(example);
-                        //StringReader stringReader = new StringReader(gridXaml);
-                        //XmlReader xmlReader = XmlReader.Create(stringReader);
-                        //Button newGrid = (Button)XamlReader.Load(xmlReader);
-
-                        Button bt = new Button();
-                        //if (GetChildOfType<TextBlock>(newGrid).Text.Contains(filter.Text))
-                        //(TextBlock)newGrid.Children[0].
-                        //if (!quitted)
-                        //{
                         if (localAll[i].ProcessName.ToLower().Contains(filter.Text.ToLower()))
                         {
-                            if (localAll[i].Responding)
-                                bt.Content = localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
+                            if (bool.Parse(checkbox.IsChecked.ToString()))
+                            {
+                                if (!collapselist.Contains(localAll[i].ProcessName))
+                                {
+                                    collapselist.Add(localAll[i].ProcessName);
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                            Button bt = new Button();
+                            long ram = 0;
+                            ram = (localAll[i].WorkingSet64 / 1024 / 1024);
+                            if (bool.Parse(checkbox.IsChecked.ToString()))
+                            {
+                                int tempnotresp = 0;
+                                for (int x = 0; x < localAll.Length; x++)
+                                {
+                                    if (localAll[x].Id != localAll[i].Id && localAll[x].ProcessName == localAll[i].ProcessName)
+                                    {
+                                        ram += (localAll[x].WorkingSet64 / 1024 / 1024);
+                                        if (!localAll[x].Responding)
+                                            tempnotresp++;
+                                    }
+                                }
+                                if (!(tempnotresp > 0))
+                                    bt.Content = localAll[i].ProcessName + "|| RAM:" + ram.ToString() + "MB";
+                                else
+                                    bt.Content = "!" + tempnotresp + " NOT RESPONDING! " + localAll[i].ProcessName + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
+                            }
                             else
-                                bt.Content = "!NOT RESPONDING! " + localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
+                            {
+                                if (localAll[i].Responding)
+                                    bt.Content = localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + ram.ToString() + "MB";
+                                else
+                                    bt.Content = "!NOT RESPONDING! " + localAll[i].ProcessName + "|| PID:" + localAll[i].Id + "|| RAM:" + (localAll[i].WorkingSet64 / 1024 / 1024).ToString() + "MB";
+                            }
+
                             //name.
                             bt.Click += new RoutedEventHandler(endprocess_Click);
-                            bt.Tag = localAll[i].ProcessName + ":" + localAll[i].Id;
+                            if (bool.Parse(checkbox.IsChecked.ToString()))
+                            {
+                                bt.Tag = localAll[i].ProcessName + ": Multi";
+                            }
+                            else
+                            {
+
+                                bt.Tag = localAll[i].ProcessName + ":" + localAll[i].Id;
+                            }
                             //MessageBox.Show(GetChildOfType<Button>(newGrid).Tag.ToString());
                             if (removed.Count > 0 && localAll[i].Id == removed[0].Id)
                             {
@@ -330,6 +363,18 @@ namespace TaskManager
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            refresh();
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            //if (!File.Exists)
+            Directory.CreateDirectory("C:/DrEthanTemp");
+            File.SetAttributes("C:/DrEthanTemp", FileAttributes.Hidden);
+            //File.CreateText("C:/DrEthanTemp/taskmanagerconfig.cfg");
+            TextWriter tw = new StreamWriter("C:/DrEthanTemp/taskmanagerconfig.cfg");
+            tw.Write(checkbox.IsChecked);
+            tw.Close();
             refresh();
         }
     }

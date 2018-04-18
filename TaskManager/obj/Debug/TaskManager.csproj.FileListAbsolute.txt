@@ -16,7 +16,6 @@ C:\Users\draper.ethan\source\repos\TaskManager\TaskManager\obj\Debug\TaskManager
 C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\bin\Debug\TaskManager.exe.config
 C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\bin\Debug\TaskManager.exe
 C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\bin\Debug\TaskManager.pdb
-C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Debug\TaskManager.csprojResolveAssemblyReference.cache
 C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Debug\MainWindow.g.cs
 C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Debug\App.g.cs
 C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Debug\TaskManager_MarkupCompile.cache
@@ -28,3 +27,4 @@ C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Debug
 C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Debug\TaskManager.csproj.CoreCompileInputs.cache
 C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Debug\TaskManager.exe
 C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Debug\TaskManager.pdb
+C:\Users\draper.ethan\Documents\GitKraken\TaskManager-Lite\TaskManager\obj\Debug\TaskManager.csprojResolveAssemblyReference.cache
