@@ -22,6 +22,7 @@ using System.Timers;
 using System.Net.NetworkInformation;
 using Microsoft.VisualBasic.Devices;
 using System.Diagnostics.PerformanceData;
+//using System.Linq;
 
 namespace TaskManager
 {
@@ -33,7 +34,13 @@ namespace TaskManager
     {
         public List<Process> removed = new List<Process>();
         public Process[] localAll;
+        public List<sortablebutton> tempbutton = new List<sortablebutton>();
         public string[] unkillable = new string[] { "bellservice", "ibsaservice", "pc-client", "m_agent_service" };
+        public enum sortby
+        {
+            nameUP, nameDOWN, pidUP, pidDOWN, ramUP, ramDOWN
+        }
+        public sortby currentsort = sortby.nameUP;
         Timer updateTimer = new Timer();
         Timer cpupdateTimer = new Timer();
 
@@ -51,6 +58,15 @@ namespace TaskManager
 
             });
         }
+
+        public class sortablebutton
+        {
+            public Button button;
+            public string name;
+            public long ram;
+            public int pid;
+        }
+
         public void cpuupdate(object source, ElapsedEventArgs e)
         {
             //MessageBox.Show("update");
@@ -274,7 +290,7 @@ namespace TaskManager
 
             localAll = Process.GetProcesses();
             PerformanceCounter ramCounter;
-
+            tempbutton.Clear();
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             ulong installed = new ComputerInfo().TotalPhysicalMemory / 1024 / 1024;
             float ramuse = ramCounter.NextValue();
@@ -353,13 +369,22 @@ namespace TaskManager
                             }
                             else
                             {
-                                proccesspanel.Children.Add(bt);
+                                if (!bool.Parse(checkbox.IsChecked.ToString()))
+                                {
+                                    tempbutton.Add(new sortablebutton { button = bt, name = localAll[i].ProcessName, ram = localAll[i].WorkingSet64 / long.Parse("1024") / long.Parse("1024"), pid = localAll[i].Id });
+                                }
+                                else
+                                {
+                                    tempbutton.Add(new sortablebutton { button = bt, name = localAll[i].ProcessName, ram = ram, pid = localAll[i].Id });
+
+                                }
                             }
                         }
                     }
                 }
 
             }
+            Sort();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -376,6 +401,127 @@ namespace TaskManager
             tw.Write(checkbox.IsChecked);
             tw.Close();
             refresh();
+        }
+        public void Sort()
+        {
+            //for (int i = 0; i < tempbutton.Count; i++)
+            //{
+
+            int temp = proccesspanel.Children.Count;
+
+            //}
+            for (int i = 0; i < temp; i++)
+            {
+                proccesspanel.Children.Remove(proccesspanel.Children[0]);
+            }
+            List<sortablebutton> SortedList = new List<sortablebutton>();
+
+            switch (currentsort)
+            {
+                case (sortby.nameUP):
+                    SortedList = tempbutton.OrderBy(o => o.name).ToList();
+                    break;
+                case (sortby.nameDOWN):
+                    SortedList = tempbutton.OrderByDescending(o => o.name).ToList();
+
+                    break;
+                case (sortby.pidDOWN):
+                    SortedList = tempbutton.OrderByDescending(o => o.pid).ToList();
+
+                    break;
+                case (sortby.pidUP):
+                    SortedList = tempbutton.OrderBy(o => o.pid).ToList();
+
+                    break;
+                case (sortby.ramDOWN):
+                    SortedList = tempbutton.OrderByDescending(o => o.ram).ToList();
+
+                    break;
+                case (sortby.ramUP):
+                    SortedList = tempbutton.OrderBy(o => o.ram).ToList();
+
+                    break;
+            }
+            for (int i = 0; i < SortedList.Count; i++)
+            {
+                proccesspanel.Children.Add(SortedList[i].button);
+            }
+        }
+        private void sortbyname_Click(object sender, RoutedEventArgs e)
+        {
+            sortbyname.Content = "Name";
+            sortbypid.Content = "Pid";
+            sortbyram.Content = "Ram";
+            if (currentsort == sortby.nameUP)
+            {
+                currentsort = sortby.nameDOWN;
+                sortbyname.Content = "Name" + @" \/";
+            }
+            else if (currentsort == sortby.nameDOWN)
+            {
+                currentsort = sortby.nameUP;
+                sortbyname.Content = "Name" + @" /\";
+            }
+            else
+            {
+                currentsort = sortby.nameUP;
+                sortbyname.Content = "Name" + @" /\";
+            }
+            Sort();
+            //sortbyname.Content = "NAME";
+            //sortbypid.Content = "PID";
+            //sortbyram.Content = "RAM";
+        }
+
+        private void sortbypid_Click(object sender, RoutedEventArgs e)
+        {
+            sortbyname.Content = "Name";
+            sortbypid.Content = "Pid";
+            sortbyram.Content = "Ram";
+            if (currentsort == sortby.pidUP)
+            {
+                currentsort = sortby.pidDOWN;
+                sortbypid.Content = "Pid" + @" \/";
+
+            }
+            else if (currentsort == sortby.pidDOWN)
+            {
+                currentsort = sortby.pidUP;
+                sortbypid.Content = "Pid" + @" /\";
+
+            }
+            else
+            {
+                currentsort = sortby.pidUP;
+                sortbypid.Content = "Pid" + @" /\";
+
+            }
+            Sort();
+        }
+
+        private void sortbyram_Click(object sender, RoutedEventArgs e)
+        {
+            sortbyname.Content = "Name";
+            sortbypid.Content = "Pid";
+            sortbyram.Content = "Ram";
+            if (currentsort == sortby.ramUP)
+            {
+                currentsort = sortby.ramDOWN;
+                sortbyram.Content = "Ram" + @" \/";
+            }
+            else if (currentsort == sortby.ramDOWN)
+            {
+                currentsort = sortby.ramUP;
+                sortbyram.Content = "Ram" + @" /\";
+
+            }
+            else
+            {
+                currentsort = sortby.ramUP;
+                sortbyram.Content = "Ram" + @" /\";
+
+            }
+            Sort();
         }
     }
 }
