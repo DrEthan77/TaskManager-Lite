@@ -83,7 +83,7 @@ namespace TaskManager
                 cpuCounter.NextValue();
                 System.Threading.Thread.Sleep(100);
                 int val = (int)cpuCounter.NextValue();
-                CPU_bar.Value = val;
+                CPU_bar.Value = 100 - val;
                 CPU_percent.Text = val + "%";
                 //close = false;
                 //MessageBox.Show(close.ToString());
@@ -295,7 +295,7 @@ namespace TaskManager
             ulong installed = new ComputerInfo().TotalPhysicalMemory / 1024 / 1024;
             float ramuse = ramCounter.NextValue();
             Ram_use.Text = Math.Round(((float.Parse(installed.ToString()) - float.Parse(ramuse.ToString())) / float.Parse(installed.ToString())) * 100f).ToString() + "%";
-            Ram_bar.Value = Math.Round(((float.Parse(installed.ToString()) - float.Parse(ramuse.ToString())) / float.Parse(installed.ToString())) * 100f);
+            Ram_bar.Value = 100 - Math.Round(((float.Parse(installed.ToString()) - float.Parse(ramuse.ToString())) / float.Parse(installed.ToString())) * 100f);
             List<string> templist = new List<string>();
             List<string> collapselist = new List<string>();
             int temp = proccesspanel.Children.Count;

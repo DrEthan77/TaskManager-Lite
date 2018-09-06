@@ -6,29 +6,72 @@
         xmlns:local="clr-namespace:TaskManager"
         mc:Ignorable="d"
         Title="MainWindow" Height="570.112" Width="525" ResizeMode="NoResize">
-  <Grid>
+	<Grid>
 
-    <ScrollViewer HorizontalAlignment="Left" Height="442" Margin="10,87,0,0" VerticalAlignment="Top" Width="497" BorderBrush="#FFBB4141">
-      <StackPanel x:Name="proccesspanel"/>
-    </ScrollViewer>
-    <TextBox x:Name="filter" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" TextChanged="TextBox_TextChanged"/>
-    <Button x:Name="example" Content="Button" HorizontalAlignment="Left" Margin="10,-63,0,0" VerticalAlignment="Top" Width="469" Background="#00DDDDDD"/>
-    <TextBlock HorizontalAlignment="Left" Margin="10,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+		<ScrollViewer HorizontalAlignment="Left" Height="442" Margin="10,87,0,0" VerticalAlignment="Top" Width="497" BorderBrush="#FFBB4141">
+			<StackPanel x:Name="proccesspanel"/>
+		</ScrollViewer>
+		<TextBox x:Name="filter" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" TextChanged="TextBox_TextChanged"/>
+		<Button x:Name="example" Content="Button" HorizontalAlignment="Left" Margin="10,-63,0,0" VerticalAlignment="Top" Width="469" Background="#00DDDDDD"/>
+		<TextBlock HorizontalAlignment="Left" Margin="10,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
       <Run Text="Filter"/>
       <LineBreak/>
       <Run/>
-    </TextBlock>
-    <Button Content="Refresh" HorizontalAlignment="Left" Margin="432,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-    <CheckBox x:Name="checkbox" Content="Collapse Similar" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="112" Margin="10,8,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
-    <ProgressBar x:Name="Ram_bar" HorizontalAlignment="Left" Height="20" Margin="138,10,0,0" VerticalAlignment="Top" Width="122"/>
-    <ProgressBar x:Name="CPU_bar" HorizontalAlignment="Left" Height="20" Margin="289,10,0,0" VerticalAlignment="Top" Width="122"/>
-    <TextBlock HorizontalAlignment="Left" Height="18" Margin="289,11,0,0" TextWrapping="Wrap" Text="CPU usage:" VerticalAlignment="Top" Width="63"/>
-    <TextBlock HorizontalAlignment="Left" Margin="138,11,0,0" TextWrapping="Wrap" Text="RAM Usage:" VerticalAlignment="Top" RenderTransformOrigin="-0.571,0" Height="19"/>
-    <TextBlock x:Name="Ram_use" HorizontalAlignment="Left" Height="19" Margin="207,11,0,0" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Width="53" RenderTransformOrigin="2.237,-6.684"/>
-    <TextBlock x:Name="CPU_percent" HorizontalAlignment="Left" Margin="352,11,0,0" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Height="19" Width="59"/>
-    <Button x:Name="sortbyname" Content="Name /\" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Width="164" Height="25" Click="sortbyname_Click"/>
-    <Button x:Name="sortbypid" Content="Pid" HorizontalAlignment="Left" Margin="174,62,0,0" VerticalAlignment="Top" Width="168" Height="25" Click="sortbypid_Click"/>
-    <Button x:Name="sortbyram" Content="Ram" HorizontalAlignment="Left" Margin="342,62,0,0" VerticalAlignment="Top" Width="147" Height="25" Click="sortbyram_Click"/>
+		</TextBlock>
+		<Button Content="Refresh" HorizontalAlignment="Left" Margin="432,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Background="White"/>
+		<CheckBox x:Name="checkbox" Content="Collapse Similar" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="112" Margin="10,8,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
+		<ProgressBar x:Name="Ram_bar" Foreground="#FFE6E6E6" HorizontalAlignment="Left" Height="20" Margin="138,10,0,0" VerticalAlignment="Top" Width="122" RenderTransformOrigin="0.5,0.5" Value="100" >
+			<ProgressBar.Background>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<LinearGradientBrush.RelativeTransform>
+						<RotateTransform Angle="270"/>
+					</LinearGradientBrush.RelativeTransform>
+					<GradientStop Color="Lime" Offset="1"/>
+					<GradientStop Color="Red" Offset="0.183"/>
+					<GradientStop Color="Lime" Offset="0.487"/>
+					<GradientStop Color="#FFF3FF00" Offset="0.465"/>
+					<GradientStop Color="#FFFBFB00" Offset="0.204"/>
+				</LinearGradientBrush>
+			</ProgressBar.Background>
+			<ProgressBar.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform Angle="180"/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</ProgressBar.RenderTransform>
+		</ProgressBar>
+		<ProgressBar x:Name="CPU_bar" Foreground="#FFE6E6E6" HorizontalAlignment="Left" Height="20" Margin="289,10,0,0" VerticalAlignment="Top" Width="122" Value="100" LargeChange="0" RenderTransformOrigin="0.5,0.5">
+			<ProgressBar.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform Angle="-180"/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</ProgressBar.RenderTransform>
+			<ProgressBar.Background>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<LinearGradientBrush.RelativeTransform>
+						<RotateTransform Angle="270"/>
+					</LinearGradientBrush.RelativeTransform>
+					<GradientStop Color="Lime" Offset="1"/>
+					<GradientStop Color="Red" Offset="0.183"/>
+					<GradientStop Color="Lime" Offset="0.487"/>
+					<GradientStop Color="#FFF3FF00" Offset="0.465"/>
+					<GradientStop Color="#FFFBFB00" Offset="0.204"/>
+				</LinearGradientBrush>
+			</ProgressBar.Background>
+		</ProgressBar>
+		<TextBlock HorizontalAlignment="Left" Height="18" Margin="289,11,0,0" TextWrapping="Wrap" Text="CPU usage:" VerticalAlignment="Top" Width="63"/>
+		<TextBlock HorizontalAlignment="Left" Margin="138,11,0,0" TextWrapping="Wrap" Text="RAM Usage:" VerticalAlignment="Top" RenderTransformOrigin="-0.571,0" Height="19"/>
 
-  </Grid>
+		<TextBlock x:Name="Ram_use" HorizontalAlignment="Left" Height="19" Margin="207,11,0,0" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Width="53" RenderTransformOrigin="2.237,-6.684"/>
+		<TextBlock x:Name="CPU_percent" HorizontalAlignment="Left" Margin="352,11,0,0" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Height="19" Width="59"/>
+		<Button x:Name="sortbyname" Content="Name /\" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Width="164" Height="25" Click="sortbyname_Click" Background="White"/>
+		<Button x:Name="sortbypid" Content="Pid" HorizontalAlignment="Left" Margin="174,62,0,0" VerticalAlignment="Top" Width="168" Height="25" Click="sortbypid_Click" Background="White"/>
+		<Button x:Name="sortbyram" Content="Ram" HorizontalAlignment="Left" Margin="342,62,0,0" VerticalAlignment="Top" Width="147" Height="25" Click="sortbyram_Click" Background="White"/>
+
+	</Grid>
 </Window>
