@@ -100,5 +100,8 @@
   <ItemGroup>
     <Resource Include="task_manager_qrg_icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DrEthan.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

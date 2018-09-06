@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="570.112" Width="525" ResizeMode="NoResize">
+        Title="MainWindow" Height="580.112" Width="532" ResizeMode="NoResize">
 	<Grid>
 
 		<ScrollViewer HorizontalAlignment="Left" Height="442" Margin="10,87,0,0" VerticalAlignment="Top" Width="497" BorderBrush="#FFBB4141">
@@ -71,7 +71,7 @@
 		<TextBlock x:Name="CPU_percent" HorizontalAlignment="Left" Margin="352,11,0,0" TextWrapping="Wrap" Text="0%" VerticalAlignment="Top" Height="19" Width="59"/>
 		<Button x:Name="sortbyname" Content="Name /\" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Width="164" Height="25" Click="sortbyname_Click" Background="White"/>
 		<Button x:Name="sortbypid" Content="Pid" HorizontalAlignment="Left" Margin="174,62,0,0" VerticalAlignment="Top" Width="168" Height="25" Click="sortbypid_Click" Background="White"/>
-		<Button x:Name="sortbyram" Content="Ram" HorizontalAlignment="Left" Margin="342,62,0,0" VerticalAlignment="Top" Width="147" Height="25" Click="sortbyram_Click" Background="White"/>
-
+		<Button x:Name="sortbyram" Content="Ram" HorizontalAlignment="Left" Margin="342,62,0,0" VerticalAlignment="Top" Width="148" Height="25" Click="sortbyram_Click" Background="White"/>
+		<Image HorizontalAlignment="Left" Height="20" Margin="490,65,0,0" VerticalAlignment="Top" Width="19" Source="DrEthan.jpg"/>
 	</Grid>
 </Window>

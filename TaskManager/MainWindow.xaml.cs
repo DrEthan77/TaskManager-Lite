@@ -100,7 +100,11 @@ namespace TaskManager
                 TextReader tr = new StreamReader("C:/DrEthanTemp/taskmanagerconfig.cfg");
                 bool tempbool = false;
                 bool.TryParse(tr.ReadLine(), out tempbool);
+                string temp2 = tr.ReadLine();
+                Console.Write(temp2);
+                sortby temp = (sortby)Enum.Parse(typeof(sortby), temp2);
                 tr.Close();
+                currentsort = temp;
                 checkbox.IsChecked = tempbool;
 
             }
@@ -287,7 +291,6 @@ namespace TaskManager
         public void refresh()
         {
             //GetCpuUsage();
-
             localAll = Process.GetProcesses();
             PerformanceCounter ramCounter;
             tempbutton.Clear();
@@ -394,13 +397,20 @@ namespace TaskManager
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             //if (!File.Exists)
+            updateconfig();
+
+            refresh();
+        }
+        public void updateconfig()
+        {
             Directory.CreateDirectory("C:/DrEthanTemp");
             File.SetAttributes("C:/DrEthanTemp", FileAttributes.Hidden);
             //File.CreateText("C:/DrEthanTemp/taskmanagerconfig.cfg");
             TextWriter tw = new StreamWriter("C:/DrEthanTemp/taskmanagerconfig.cfg");
-            tw.Write(checkbox.IsChecked);
+            tw.WriteLine(checkbox.IsChecked);
+            tw.WriteLine(currentsort);
             tw.Close();
-            refresh();
+            updatesortcontents();
         }
         public void Sort()
         {
@@ -447,27 +457,60 @@ namespace TaskManager
                 proccesspanel.Children.Add(SortedList[i].button);
             }
         }
-        private void sortbyname_Click(object sender, RoutedEventArgs e)
+        public void updatesortcontents()
         {
             sortbyname.Content = "Name";
             sortbypid.Content = "Pid";
             sortbyram.Content = "Ram";
+            switch (currentsort)
+            {
+                case sortby.nameUP:
+                    sortbyname.Content = "Name" + @" /\";
+
+                    break;
+                case sortby.nameDOWN:
+                    sortbyname.Content = "Name" + @" \/";
+
+                    break;
+                case sortby.pidUP:
+                    sortbypid.Content = "Pid" + @" /\";
+
+                    break;
+                case sortby.pidDOWN:
+                    sortbypid.Content = "Pid" + @" \/";
+
+                    break;
+                case sortby.ramUP:
+                    sortbyram.Content = "Ram" + @" /\";
+
+                    break;
+                case sortby.ramDOWN:
+                    sortbyram.Content = "Ram" + @" \/";
+
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void sortbyname_Click(object sender, RoutedEventArgs e)
+        {
+            //sortbyname.Content = "Name";
+            //sortbypid.Content = "Pid";
+            //sortbyram.Content = "Ram";
             if (currentsort == sortby.nameUP)
             {
                 currentsort = sortby.nameDOWN;
-                sortbyname.Content = "Name" + @" \/";
             }
             else if (currentsort == sortby.nameDOWN)
             {
                 currentsort = sortby.nameUP;
-                sortbyname.Content = "Name" + @" /\";
             }
             else
             {
                 currentsort = sortby.nameUP;
-                sortbyname.Content = "Name" + @" /\";
             }
             Sort();
+            updateconfig();
             //sortbyname.Content = "NAME";
             //sortbypid.Content = "PID";
             //sortbyram.Content = "RAM";
@@ -475,53 +518,49 @@ namespace TaskManager
 
         private void sortbypid_Click(object sender, RoutedEventArgs e)
         {
-            sortbyname.Content = "Name";
-            sortbypid.Content = "Pid";
-            sortbyram.Content = "Ram";
+            //sortbyname.Content = "Name";
+            //sortbypid.Content = "Pid";
+            //sortbyram.Content = "Ram";
             if (currentsort == sortby.pidUP)
             {
                 currentsort = sortby.pidDOWN;
-                sortbypid.Content = "Pid" + @" \/";
 
             }
             else if (currentsort == sortby.pidDOWN)
             {
                 currentsort = sortby.pidUP;
-                sortbypid.Content = "Pid" + @" /\";
 
             }
             else
             {
                 currentsort = sortby.pidUP;
-                sortbypid.Content = "Pid" + @" /\";
 
             }
             Sort();
+            updateconfig();
         }
 
         private void sortbyram_Click(object sender, RoutedEventArgs e)
         {
-            sortbyname.Content = "Name";
-            sortbypid.Content = "Pid";
-            sortbyram.Content = "Ram";
+            //sortbyname.Content = "Name";
+            //sortbypid.Content = "Pid";
+            //sortbyram.Content = "Ram";
             if (currentsort == sortby.ramUP)
             {
                 currentsort = sortby.ramDOWN;
-                sortbyram.Content = "Ram" + @" \/";
             }
             else if (currentsort == sortby.ramDOWN)
             {
                 currentsort = sortby.ramUP;
-                sortbyram.Content = "Ram" + @" /\";
 
             }
             else
             {
                 currentsort = sortby.ramUP;
-                sortbyram.Content = "Ram" + @" /\";
 
             }
             Sort();
+            updateconfig();
         }
     }
 }
